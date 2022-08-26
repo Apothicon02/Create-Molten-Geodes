@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "molten_geodes:molten_asurine",
+      "required": false
+    },
+    {
+      "id": "molten_geodes:molten_veridium",
+      "required": false
+    },
+    {
+      "id": "molten_geodes:molten_crimsite",
+      "required": false
+    },
+    {
+      "id": "molten_geodes:molten_ochrum",
+      "required": false
+    }
+  ]
+}
