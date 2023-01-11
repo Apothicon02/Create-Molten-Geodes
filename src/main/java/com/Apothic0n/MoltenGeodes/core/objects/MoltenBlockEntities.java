@@ -15,6 +15,11 @@ public class MoltenBlockEntities {
     public static final RegistryObject<BlockEntityType<?>> MOLTEN_CRIMSITE_BLOCK_ENTITY = BLOCK_ENTITIES.register("molten_crimsite_block_entity", () -> BlockEntityType.Builder.of(MoltenCrimsiteBlockEntity::new, MoltenBlocks.MOLTEN_CRIMSITE.get()).build(null));
     public static final RegistryObject<BlockEntityType<?>> MOLTEN_OCHRUM_BLOCK_ENTITY = BLOCK_ENTITIES.register("molten_ochrum_block_entity", () -> BlockEntityType.Builder.of(MoltenOchrumBlockEntity::new, MoltenBlocks.MOLTEN_OCHRUM.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<?>> DORMANT_ASURINE_BLOCK_ENTITY = BLOCK_ENTITIES.register("dormant_asurine_block_entity", () -> BlockEntityType.Builder.of(DormantAsurineBlockEntity::new, MoltenBlocks.DORMANT_ASURINE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<?>> DORMANT_VERIDIUM_BLOCK_ENTITY = BLOCK_ENTITIES.register("dormant_veridium_block_entity", () -> BlockEntityType.Builder.of(DormantVeridiumBlockEntity::new, MoltenBlocks.DORMANT_VERIDIUM.get()).build(null));
+    public static final RegistryObject<BlockEntityType<?>> DORMANT_CRIMSITE_BLOCK_ENTITY = BLOCK_ENTITIES.register("dormant_crimsite_block_entity", () -> BlockEntityType.Builder.of(DormantCrimsiteBlockEntity::new, MoltenBlocks.DORMANT_CRIMSITE.get()).build(null));
+    public static final RegistryObject<BlockEntityType<?>> DORMANT_OCHRUM_BLOCK_ENTITY = BLOCK_ENTITIES.register("dormant_ochrum_block_entity", () -> BlockEntityType.Builder.of(DormantOchrumBlockEntity::new, MoltenBlocks.DORMANT_OCHRUM.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }
