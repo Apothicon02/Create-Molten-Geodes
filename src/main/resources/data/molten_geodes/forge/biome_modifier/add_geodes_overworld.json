@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": ["molten_geodes:asurine_geode", "molten_geodes:veridium_geode", "molten_geodes:crimsite_geode", "molten_geodes:ochrum_geode", "molten_geodes:brass_geode"],
+  "step": "underground_ores"
+}

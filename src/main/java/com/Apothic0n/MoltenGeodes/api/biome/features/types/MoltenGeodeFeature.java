@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BuddingAmethystBlock;
@@ -34,7 +35,7 @@ public class MoltenGeodeFeature extends Feature<GeodeConfiguration> {
 
     public boolean place(FeaturePlaceContext<GeodeConfiguration> pContext) {
         GeodeConfiguration geodeconfiguration = pContext.config();
-        Random random = pContext.random();
+        RandomSource random = pContext.random();
         BlockPos blockpos = pContext.origin();
         WorldGenLevel worldgenlevel = pContext.level();
         int i = geodeconfiguration.minGenOffset;

@@ -44,7 +44,7 @@ Adds molten geodes for renewable "oreblocks" from create.
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[40,)" #mandatory
+    versionRange="[43.2.4,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -54,18 +54,18 @@ Adds molten geodes for renewable "oreblocks" from create.
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.molten_geodes]]
     modId="create"
     mandatory=true
-    versionRange="[v0.5c,)"
+    versionRange="[v0.5i,)"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.molten_geodes]]
     modId="flywheel"
     mandatory=true
-    versionRange="[0.6.4,)"
+    versionRange="[0.6.8,)"
     ordering="NONE"
     side="BOTH"

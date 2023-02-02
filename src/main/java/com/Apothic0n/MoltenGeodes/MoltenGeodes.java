@@ -5,10 +5,14 @@ import com.Apothic0n.MoltenGeodes.config.Configs;
 import com.Apothic0n.MoltenGeodes.core.objects.MoltenBlockEntities;
 import com.Apothic0n.MoltenGeodes.core.objects.MoltenBlocks;
 import com.Apothic0n.MoltenGeodes.core.objects.MoltenItems;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import static com.Apothic0n.MoltenGeodes.api.biome.features.MoltenGeodesFeatures.*;
 
 // The value here should match an entry in the META-INF/mods.toml file.
 @Mod("molten_geodes")
@@ -30,7 +34,11 @@ public class MoltenGeodes
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-
+            final Holder<PlacedFeature> initializeAsurine = ASURINE_GEODE_PLACED;
+            final Holder<PlacedFeature> initializeVeridium = VERIDIUM_GEODE_PLACED;
+            final Holder<PlacedFeature> initializeCrimsite = CRIMSITE_GEODE_PLACED;
+            final Holder<PlacedFeature> initializeOchrum = OCHRUM_GEODE_PLACED;
+            final Holder<PlacedFeature> initializeBrass = BRASS_GEODE_PLACED;
         });
     }
 }
