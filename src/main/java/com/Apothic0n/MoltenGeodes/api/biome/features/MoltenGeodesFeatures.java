@@ -28,7 +28,7 @@ public class MoltenGeodesFeatures {
     public static final Block Veridium = Registry.BLOCK.get(new ResourceLocation("create", "veridium"));
     public static final Block Crimsite = Registry.BLOCK.get(new ResourceLocation("create", "crimsite"));
     public static final Block Ochrum = Registry.BLOCK.get(new ResourceLocation("create", "ochrum"));
-
+    public static final Block RequiredLiquid = Registry.BLOCK.get(new ResourceLocation(CommonConfig.requiredLiquid.get()));
     //ConfiguredFeatures
     public static final Holder<ConfiguredFeature<GeodeConfiguration, ?>> ASURINE_GEODE_CONFIGURED = FeatureUtils.register("molten_geodes:asurine_geode", MoltenGeodesFeatureRegistry.MOLTEN_GEODE.get(),
             new GeodeConfiguration(new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR), BlockStateProvider.simple(Asurine), BlockStateProvider.simple(MoltenBlocks.DORMANT_ASURINE.get()), BlockStateProvider.simple(Blocks.OBSIDIAN), BlockStateProvider.simple(Blocks.SMOOTH_BASALT), List.of(Asurine.defaultBlockState()), BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS), new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 4.2D), new GeodeCrackSettings(0.95D, 2.0D, 2), 0.0D, 0.006D, true, UniformInt.of(4, 6), UniformInt.of(2, 4), UniformInt.of(1, 2), -28, 28, 0.05D, 1));
