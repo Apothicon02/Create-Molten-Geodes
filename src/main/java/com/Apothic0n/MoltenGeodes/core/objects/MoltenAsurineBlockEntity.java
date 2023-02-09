@@ -3,23 +3,19 @@ package com.Apothic0n.MoltenGeodes.core.objects;
 import com.Apothic0n.MoltenGeodes.api.biome.features.MoltenGeodesFeatures;
 import com.Apothic0n.MoltenGeodes.config.CommonConfig;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.Apothic0n.MoltenGeodes.api.biome.features.MoltenGeodesFeatures.RequiredLiquid;
 import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
 public class MoltenAsurineBlockEntity extends BlockEntity {
@@ -33,17 +29,17 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
         if (!level.isClientSide) {
             ServerLevel serverLevel = level.getServer().getLevel(level.dimension());
             if (serverLevel != null) {
-                spreadBlock(blockPos.above(), serverLevel);
-                spreadBlock(blockPos.below(), serverLevel);
-                spreadBlock(blockPos.north(), serverLevel);
-                spreadBlock(blockPos.east(), serverLevel);
-                spreadBlock(blockPos.south(), serverLevel);
-                spreadBlock(blockPos.west(), serverLevel);
+                spreadBlock(RequiredLiquid, blockPos.above(), serverLevel);
+                spreadBlock(RequiredLiquid, blockPos.below(), serverLevel);
+                spreadBlock(RequiredLiquid, blockPos.north(), serverLevel);
+                spreadBlock(RequiredLiquid, blockPos.east(), serverLevel);
+                spreadBlock(RequiredLiquid, blockPos.south(), serverLevel);
+                spreadBlock(RequiredLiquid, blockPos.west(), serverLevel);
             }
         }
     }
 
-    private static void spreadBlock(BlockPos pos, WorldGenLevel level) {
+    private static void spreadBlock(Block requiredLiquid, BlockPos pos, WorldGenLevel level) {
         BlockState[] contacts = {level.getBlockState(pos.above()), level.getBlockState(pos.below()), level.getBlockState(pos.north()), level.getBlockState(pos.east()), level.getBlockState(pos.south()), level.getBlockState(pos.west())};
         Boolean isTouchingAsurine = false;
         for (int i = 0; i < contacts.length; ++i) { //Check each non-diagonal neighbor to see if it is asurine
@@ -51,17 +47,17 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
                 isTouchingAsurine = true;
             }
         }
-        if (isTouchingAsurine && !CommonConfig.useLava.get() && level.getBlockState(pos).is(Blocks.LAVA) || isTouchingAsurine && CommonConfig.useLava.get() && level.getBlockState(pos).is(Blocks.LAVA) && level.getBlockState(pos).getFluidState().isSource() || isTouchingAsurine && level.getBlockState(pos).is(MoltenGeodesFeatures.Asurine)) {
-            if (!CommonConfig.useLava.get() && level.getBlockState(pos).is(Blocks.LAVA) || CommonConfig.useLava.get() && level.getBlockState(pos).is(Blocks.LAVA) && level.getBlockState(pos).getFluidState().isSource()) {
+        if (isTouchingAsurine && !CommonConfig.useSource.get() && level.getBlockState(pos).is(requiredLiquid) || isTouchingAsurine && CommonConfig.useSource.get() && level.getBlockState(pos).is(requiredLiquid) && level.getBlockState(pos).getFluidState().isSource() || isTouchingAsurine && level.getBlockState(pos).is(MoltenGeodesFeatures.Asurine)) {
+            if (!CommonConfig.useSource.get() && level.getBlockState(pos).is(requiredLiquid) || CommonConfig.useSource.get() && level.getBlockState(pos).is(requiredLiquid) && level.getBlockState(pos).getFluidState().isSource()) {
                 level.setBlock(pos, MoltenGeodesFeatures.Asurine.defaultBlockState(), UPDATE_ALL);
                 level.playSound(null, pos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
                 level.getServer().getLevel(level.getLevel().dimension()).sendParticles(ParticleTypes.LARGE_SMOKE, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.25D, (double)pos.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D);
             }
-            List<BlockPos> convertedBlocks = convertTouching(pos, level);
+            List<BlockPos> convertedBlocks = convertTouching(requiredLiquid, pos, level);
             if (convertedBlocks != null && !convertedBlocks.isEmpty() && spreadDistance >= 1) {
                 List<BlockPos> secondaryConvertedBlocks = new ArrayList<>(List.of());
                 for (int i = 0; i < convertedBlocks.size(); i++) {
-                    List<BlockPos> minorConvertedBlocks = convertTouching(convertedBlocks.get(i), level);
+                    List<BlockPos> minorConvertedBlocks = convertTouching(requiredLiquid, convertedBlocks.get(i), level);
                     if (minorConvertedBlocks != null && minorConvertedBlocks.isEmpty()) {
                         secondaryConvertedBlocks.addAll(minorConvertedBlocks);
                     }
@@ -69,7 +65,7 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
                 if (secondaryConvertedBlocks != null && !secondaryConvertedBlocks.isEmpty() && spreadDistance >= 2) {
                     List<BlockPos> teritaryConvertedBlocks = new ArrayList<>(List.of());
                     for (int i = 0; i < secondaryConvertedBlocks.size(); i++) {
-                        List<BlockPos> minorConvertedBlocks = convertTouching(secondaryConvertedBlocks.get(i), level);
+                        List<BlockPos> minorConvertedBlocks = convertTouching(requiredLiquid, secondaryConvertedBlocks.get(i), level);
                         if (minorConvertedBlocks != null && minorConvertedBlocks.isEmpty()) {
                             teritaryConvertedBlocks.addAll(minorConvertedBlocks);
                         }
@@ -77,7 +73,7 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
                     if (teritaryConvertedBlocks != null && !teritaryConvertedBlocks.isEmpty() && spreadDistance >= 3) {
                         List<BlockPos> quaternaryConvertedBlocks = new ArrayList<>(List.of());
                         for (int i = 0; i < teritaryConvertedBlocks.size(); i++) {
-                            List<BlockPos> minorConvertedBlocks = convertTouching(teritaryConvertedBlocks.get(i), level);
+                            List<BlockPos> minorConvertedBlocks = convertTouching(requiredLiquid, teritaryConvertedBlocks.get(i), level);
                             if (minorConvertedBlocks != null && minorConvertedBlocks.isEmpty()) {
                                 quaternaryConvertedBlocks.addAll(minorConvertedBlocks);
                             }
@@ -85,7 +81,7 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
                         if (quaternaryConvertedBlocks != null && !quaternaryConvertedBlocks.isEmpty() && spreadDistance >= 4) {
                             List<BlockPos> quinaryConvertedBlocks = new ArrayList<>(List.of());
                             for (int i = 0; i < quaternaryConvertedBlocks.size(); i++) {
-                                List<BlockPos> minorConvertedBlocks = convertTouching(quaternaryConvertedBlocks.get(i), level);
+                                List<BlockPos> minorConvertedBlocks = convertTouching(requiredLiquid, quaternaryConvertedBlocks.get(i), level);
                                 if (minorConvertedBlocks != null && minorConvertedBlocks.isEmpty()) {
                                     quinaryConvertedBlocks.addAll(minorConvertedBlocks);
                                 }
@@ -93,7 +89,7 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
                             if (quinaryConvertedBlocks != null && !quinaryConvertedBlocks.isEmpty() && spreadDistance >= 5) {
                                 List<BlockPos> senaryConvertedBlocks = new ArrayList<>(List.of());
                                 for (int i = 0; i < quinaryConvertedBlocks.size(); i++) {
-                                    List<BlockPos> minorConvertedBlocks = convertTouching(quinaryConvertedBlocks.get(i), level);
+                                    List<BlockPos> minorConvertedBlocks = convertTouching(requiredLiquid, quinaryConvertedBlocks.get(i), level);
                                     if (minorConvertedBlocks != null && minorConvertedBlocks.isEmpty()) {
                                         senaryConvertedBlocks.addAll(minorConvertedBlocks);
                                     }
@@ -106,13 +102,13 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
         }
     }
 
-    private static List<BlockPos> convertTouching(BlockPos pos, WorldGenLevel level) {
-        List<BlockPos> lavaBlocks = getLavaTouching(pos, level);
+    private static List<BlockPos> convertTouching(Block requiredLiquid, BlockPos pos, WorldGenLevel level) {
+        List<BlockPos> lavaBlocks = getLavaTouching(requiredLiquid, pos, level);
         List<BlockPos> convertedBlocks = new ArrayList<>(List.of());
         if (lavaBlocks != null && !lavaBlocks.isEmpty()) {
             for (int i = 0; i < lavaBlocks.size(); ++i) {
                 BlockPos lavaPos = lavaBlocks.get(i);
-                if (!CommonConfig.useLava.get() && level.getBlockState(lavaPos).is(Blocks.LAVA) || CommonConfig.useLava.get() && level.getBlockState(lavaPos).is(Blocks.LAVA) && level.getBlockState(lavaPos).getFluidState().isSource()) {
+                if (!CommonConfig.useSource.get() && level.getBlockState(lavaPos).is(requiredLiquid) || CommonConfig.useSource.get() && level.getBlockState(lavaPos).is(requiredLiquid) && level.getBlockState(lavaPos).getFluidState().isSource()) {
                     level.setBlock(lavaPos, MoltenGeodesFeatures.Asurine.defaultBlockState(), UPDATE_ALL);
                     level.playSound(null, lavaPos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 1.0f, 1.0f);
                     level.getServer().getLevel(level.getLevel().dimension()).sendParticles(ParticleTypes.LARGE_SMOKE, (double)lavaPos.getX() + 0.5D, (double)lavaPos.getY() + 0.25D, (double)lavaPos.getZ() + 0.5D, 8, 0.5D, 0.25D, 0.5D, 0.0D);
@@ -126,11 +122,11 @@ public class MoltenAsurineBlockEntity extends BlockEntity {
         return null;
     }
 
-    private static List<BlockPos> getLavaTouching(BlockPos pos, WorldGenLevel level) {
+    private static List<BlockPos> getLavaTouching(Block requiredLiquid, BlockPos pos, WorldGenLevel level) {
         BlockPos[] contacts = {pos.above(), pos.below(), pos.north(), pos.east(), pos.south(), pos.west()};
         List<BlockPos> lavaBlocks = new ArrayList<>(List.of());
         for (int i = 0; i < contacts.length; ++i) { //Check each non-diagonal neighbor to see if it is asurine
-            if (!CommonConfig.useLava.get() && level.getBlockState(pos).is(Blocks.LAVA) || CommonConfig.useLava.get() && level.getBlockState(pos).is(Blocks.LAVA) && level.getBlockState(pos).getFluidState().isSource() || level.getBlockState(contacts[i]).is(MoltenGeodesFeatures.Asurine)) {
+            if (!CommonConfig.useSource.get() && level.getBlockState(contacts[i]).is(requiredLiquid) || CommonConfig.useSource.get() && level.getBlockState(contacts[i]).is(requiredLiquid) && level.getBlockState(contacts[i]).getFluidState().isSource() || level.getBlockState(contacts[i]).is(MoltenGeodesFeatures.Asurine)) {
                 lavaBlocks.add(contacts[i]);
             }
         }
